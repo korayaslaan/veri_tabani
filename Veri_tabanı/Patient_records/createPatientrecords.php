@@ -7,33 +7,30 @@ if (isset($_GET["key"])) {
 
         $postdata = file_get_contents("php://input");
 
+
+
         if (isset($postdata)) {
 
                 $request = json_decode($postdata);
 
-          if (!empty($request->admin_id) && !empty($request->admin_token)) {
-
-                        $admin_id = $request->admin_id;
-
-                        $admin_token = $request->admin_token;
 
 
+                $hasta_id = $request->hasta_id;
 
-                        $staff = new Staff();
+                $ucret_id = $request->ucret_id;
 
-                        echo json_encode($staff->getAllStaff($admin_id, $admin_token), JSON_UNESCAPED_UNICODE);
+                $doktor_id = $request->doktor_id;
 
-                } else {
+                $aciklama = $request->aciklama;
 
-                        $result["result"] = false;
+                $bakiye_id = $request->bakiye_id;
 
-                        $result["code"] = 1001;
 
-                        $result["data"] = "access denied";
 
-                        echo json_encode($result, JSON_UNESCAPED_UNICODE);
+                        $records = new Patientrecords();
 
-                }
+                        echo json_encode($records->createPatientrecords($hasta_id, $ucret_id, $doktor_id, $aciklama, $bakiye_id), JSON_UNESCAPED_UNICODE);
+
 
         } else {
 

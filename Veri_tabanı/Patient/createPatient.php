@@ -25,35 +25,13 @@ if (isset($_GET["key"])) {
 
                 $tc_number = $request->tc_number;
 
-                $department = $request->department;
-
-                $duty = $request->duty;
-
-                $wage = $request->wage;
-
-          if (!empty($request->admin_id) && !empty($request->admin_token)) {
-
-                        $admin_id = $request->admin_id;
-
-                        $admin_token = $request->admin_token;
+                $date_birth = $request->date_birth;
 
 
+                        $patient = new Patient();
 
-                        $staff = new Staff();
+                        echo json_encode($patient->createPatient($name, $surname, $tel, $email, $tc_number, $date_birth), JSON_UNESCAPED_UNICODE);
 
-                        echo json_encode($staff->createStaff($name, $surname, $tel, $email, $tc_number, $department,$duty, $wage ,$admin_id, $admin_token), JSON_UNESCAPED_UNICODE);
-
-                } else {
-
-                        $result["result"] = false;
-
-                        $result["code"] = 1001;
-
-                        $result["data"] = "access denied";
-
-                        echo json_encode($result, JSON_UNESCAPED_UNICODE);
-
-                }
 
         } else {
 

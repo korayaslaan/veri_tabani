@@ -14,31 +14,22 @@ if(isset($_GET["key"])){
 
         $request = json_decode($postdata);
 
-
         $id = $request->id;
 
-if (!empty($request->admin_id) && !empty($request->admin_token)) {
+        $hasta_id = $request->hasta_id;
 
-            $admin_id = $request->admin_id;
+        $ucret_id = $request->ucret_id;
 
-            $admin_token = $request->admin_token;
+        $doktor_id = $request->doktor_id;
 
+        $aciklama = $request->aciklama;
 
-            $staff = new Staff();
+        $bakiye_id = $request->bakiye_id;
 
-            echo json_encode($staff->deleteStaff($id ,$admin_id,$admin_token), JSON_UNESCAPED_UNICODE);
+            $records = new Patientrecords();
 
-    } else {
+            echo json_encode($records->updatePatientrecords($id,$hasta_id, $ucret_id, $doktor_id, $aciklama, $bakiye_id), JSON_UNESCAPED_UNICODE);
 
-        $result["result"] = false;
-
-        $result["code"] = 1001;
-
-        $result["data"] ="access denied";
-
-        echo json_encode($result, JSON_UNESCAPED_UNICODE);
-
- }
 
  } else {
 

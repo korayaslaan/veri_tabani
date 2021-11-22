@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: 127.0.0.1
--- Üretim Zamanı: 18 Kas 2021, 05:58:17
+-- Üretim Zamanı: 22 Kas 2021, 09:10:22
 -- Sunucu sürümü: 10.4.21-MariaDB
 -- PHP Sürümü: 8.0.12
 
@@ -46,8 +46,9 @@ CREATE TABLE `calisanlar` (
 
 INSERT INTO `calisanlar` (`id`, `name`, `surname`, `tel`, `email`, `tc_number`, `department`, `duty`, `wage`, `reg_date`) VALUES
 (2, 'taha', 'aslan', 1, '1', 1, '1', '1', '1', '2021-11-17 11:51:13'),
-(3, 'taha koray', 'aslan', 4566, 'lusıdt7ftgs@gmail.com', 7468498, 'çene', '5000tl', 'dolgu', '2021-11-17 12:03:35'),
-(4, 'taha koray', 'aslan', 4566, 'lusıdt7ftgs@gmail.com', 7468498, 'çene', '5000tl', 'dolgu', '2021-11-17 12:22:11');
+(4, 'sevval', 'ural', 854545, 'wewewe@gmail.com', 7468757, 'çene', '5000tl', 'dolgu', '2021-11-19 07:38:25'),
+(5, 'guncellendı', 'guncel', 4566, 'lusıdt7ftgs@gmail.com', 7468498, 'çene', '5000tl', 'dolgu', '2021-11-19 07:19:00'),
+(6, 'şevvalll', 'ural', 45123166, 'fgh1fgh@gmail.com', 74168498, 'çene', '50000tl', 'dolgu', '2021-11-22 07:28:13');
 
 -- --------------------------------------------------------
 
@@ -66,6 +67,13 @@ CREATE TABLE `hasta_bilgileri` (
   `reg_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
 
+--
+-- Tablo döküm verisi `hasta_bilgileri`
+--
+
+INSERT INTO `hasta_bilgileri` (`id`, `name`, `surname`, `tel`, `email`, `tc_number`, `date_birth`, `reg_date`) VALUES
+(4, 'şevvalll', 'ural', 45123166, 'fgh1fgh@gmail.com', 74168498, '2000-01-01', '2021-11-22 07:40:51');
+
 -- --------------------------------------------------------
 
 --
@@ -81,6 +89,13 @@ CREATE TABLE `hasta_kayitlari` (
   `bakiye_id` int(100) NOT NULL,
   `reg_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
+
+--
+-- Tablo döküm verisi `hasta_kayitlari`
+--
+
+INSERT INTO `hasta_kayitlari` (`id`, `hasta_id`, `ucret_id`, `doktor_id`, `aciklama`, `bakiye_id`, `reg_date`) VALUES
+(1, 5, 5, 5, '5', 5, '2021-11-22 07:59:25');
 
 -- --------------------------------------------------------
 
@@ -143,13 +158,15 @@ CREATE TABLE `ücret` (
 -- Tablo için indeksler `calisanlar`
 --
 ALTER TABLE `calisanlar`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `tel` (`tel`,`email`,`tc_number`);
 
 --
 -- Tablo için indeksler `hasta_bilgileri`
 --
 ALTER TABLE `hasta_bilgileri`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `tel` (`tel`,`email`,`tc_number`);
 
 --
 -- Tablo için indeksler `hasta_kayitlari`
@@ -183,19 +200,19 @@ ALTER TABLE `ücret`
 -- Tablo için AUTO_INCREMENT değeri `calisanlar`
 --
 ALTER TABLE `calisanlar`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `hasta_bilgileri`
 --
 ALTER TABLE `hasta_bilgileri`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `hasta_kayitlari`
 --
 ALTER TABLE `hasta_kayitlari`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `kullanıcılar`

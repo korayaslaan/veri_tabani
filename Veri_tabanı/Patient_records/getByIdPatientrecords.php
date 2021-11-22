@@ -13,29 +13,9 @@ if (isset($_GET["key"])) {
 
                 $id = $request->id;
 
-          if (!empty($request->admin_id) && !empty($request->admin_token)) {
+                        $records = new Patientrecords();
 
-                        $admin_id = $request->admin_id;
-
-                        $admin_token = $request->admin_token;
-
-
-
-                        $staff = new Staff();
-
-                        echo json_encode($staff->getByIdStaff($id,$admin_id, $admin_token), JSON_UNESCAPED_UNICODE);
-
-                } else {
-
-                        $result["result"] = false;
-
-                        $result["code"] = 1001;
-
-                        $result["data"] = "access denied";
-
-                        echo json_encode($result, JSON_UNESCAPED_UNICODE);
-
-                }
+                        echo json_encode($records->getByIdPatientrecords($id), JSON_UNESCAPED_UNICODE);
 
         } else {
 

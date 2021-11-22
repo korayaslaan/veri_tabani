@@ -95,7 +95,7 @@ class Crud extends Config
     }
 
     function checkTokenForAdmin($id,$token){
-        $sql = "Select id from admins WHERE id='$id' AND token = '$token' ";
+        $sql = "Select id from kullanıcılar WHERE id='$id' AND token = '$token' ";
         $result=$this->get($sql);
         $return=false;
         if($result){
@@ -480,7 +480,7 @@ class User extends Crud
 
 class Staff extends Crud
 {
-    function createStaff($name, $position, $tel, $email, $tc_number, $department, $duty ,$admin_id, $admin_token)
+    function createStaff($name,$surname, $tel, $email, $tc_number, $department, $duty, $wage ,$admin_id, $admin_token)
     {
     
         $result["result"]=false;
@@ -488,8 +488,8 @@ class Staff extends Crud
         $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
 
         if($result["result"] == true){
-        $sql="INSERT INTO calisanlar (name, position, tel, email, tc_number, department, duty) VALUES (?,?,?,?,?,?,?)";
-        $data=[$name, $position, $tel, $email, $tc_number, $department, $duty ];
+        $sql="INSERT INTO calisanlar (name, surname, tel, email, tc_number, department,duty, wage) VALUES (?,?,?,?,?,?,?,?)";
+        $data=[$name,$surname, $tel, $email, $tc_number, $department,$duty, $wage ];
         $result["result"] = $this->insertAndUpdate($sql,$data);
 
     }
@@ -503,40 +503,184 @@ class Staff extends Crud
 
     }
     
-    function deleteTeam($team_id,$user_id,$admin_id,$user_token,$admin_token)
+    function deleteStaff($id,$admin_id,$admin_token)
     {
+        $result["result"]=false;
+
+        $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
+
+        if($result["result"] == true){
      
-        $sql = "DELETE FROM team WHERE id = '$team_id'";
+        $sql = "DELETE FROM calisanlar WHERE id = '$id'";
         $result["data"] = $this->delete($sql);
+
+    }
+    else{
+        $result["result"] = false;
+        $result["code"] = 4004;
+        $result["data"] ="error wrong token or id";
+    }
       
         return $result;
     }
-    function updateTeam($team_id,$name,$position,$about,$facebook,$instagram,$twitter,$whatsapp,$youtube,$linkedin,$phone,$img_url,$user_id,$admin_id,$user_token,$admin_token)
+
+
+    function updateStaff($id,$name,$surname, $tel, $email, $tc_number, $department, $duty, $wage ,$admin_id, $admin_token)
     {
+        $result["result"]=false;
+
+        $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
+
+        if($result["result"] == true){
       
-        $sql = "UPDATE team SET name = ?, position = ?, about = ?, facebook = ?, instagram = ?, twitter = ?, whatsapp = ?, youtube = ?, linkedin = ?, phone = ?, img_url = ? WHERE id = '$team_id'";
-        $data = [$name,$position,$about,$facebook,$instagram,$twitter,$whatsapp,$youtube,$linkedin,$phone,$img_url];
+        $sql = "UPDATE calisanlar SET name = ?, surname = ?, tel = ?, email = ?, tc_number = ?, department = ?, duty = ?, wage = ? WHERE id = '$id'";
+        $data = [$name,$surname, $tel, $email, $tc_number, $department, $duty, $wage];
         $result["data"] = $this->insertAndUpdate($sql,$data);
-      
+    }
+    else{
+        $result["result"] = false;
+        $result["code"] = 4004;
+        $result["data"] ="error wrong token or id";
+    }
 
         return $result;
     }
 
-    function getByIdTeam($team_id)
+    function getByIdStaff($id,$admin_id,$admin_token)
     {
+        $result["result"]=false;
 
-        $sql = "Select * from team WHERE id='$team_id' ";
+        $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
+
+        if($result["result"] == true){
+
+        $sql = "Select * from calisanlar WHERE id='$id' ";
         $result["data"]=$this->get($sql);
     
+    }
+    else{
+        $result["result"] = false;
+        $result["code"] = 4004;
+        $result["data"] ="error wrong token or id";
+    }
     return $result;
 
     }
 
-    function getAllTeam()
+    function getAllStaff($admin_id,$admin_token)
     {
+        $result["result"]=false;
 
-        $sql = "Select * from team ";
+        $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
+
+        if($result["result"] == true){
+
+        $sql = "Select * from calisanlar ";
         $result["data"]=$this->getAll($sql);
+    }
+    else{
+        $result["result"] = false;
+        $result["code"] = 4004;
+        $result["data"] ="error wrong token or id";
+    }
+        return $result;
+
+    }
+
+}
+class Patient extends Crud
+{
+    function createPatient($name,$surname, $tel, $email, $tc_number, $date_birth)
+    {
+        $sql="INSERT INTO hasta_bilgileri (name, surname, tel, email, tc_number, date_birth) VALUES (?,?,?,?,?,?)";
+        $data=[$name,$surname, $tel, $email, $tc_number, $date_birth ];
+        $result["result"] = $this->insertAndUpdate($sql,$data);
+
+        return $result;
+
+    }
+    
+    function deletePatient($id)
+    {
+        $sql = "DELETE FROM hasta_bilgileri WHERE id = '$id'";
+        $result["data"] = $this->delete($sql);
+
+        return $result;
+    }
+
+
+    function updatePatient($id,$name,$surname, $tel, $email, $tc_number, $date_birth)
+    {     
+        $sql = "UPDATE hasta_bilgileri SET name = ?, surname = ?, tel = ?, email = ?, tc_number = ?, date_birth = ? WHERE id = '$id'";
+        $data = [$name,$surname, $tel, $email, $tc_number, $date_birth];
+        $result["data"] = $this->insertAndUpdate($sql,$data);
+
+        return $result;
+    }
+
+    function getByIdPatient($id)
+    {
+        $sql = "Select * from hasta_bilgileri WHERE id='$id' ";
+        $result["data"]=$this->get($sql);
+ 
+    return $result;
+
+    }
+
+    function getAllPatient()
+    {
+        $sql = "Select * from hasta_bilgileri ";
+        $result["data"]=$this->getAll($sql);
+
+        return $result;
+
+    }
+
+}
+class Patientrecords extends Crud
+{
+    function createPatientrecords($hasta_id, $ucret_id, $doktor_id, $aciklama, $bakiye_id)
+    {
+        $sql="INSERT INTO hasta_kayitlari (hasta_id, ucret_id, doktor_id, aciklama, bakiye_id) VALUES (?,?,?,?,?)";
+        $data=[$hasta_id,$ucret_id, $doktor_id, $aciklama, $bakiye_id];
+        $result["result"] = $this->insertAndUpdate($sql,$data);
+
+        return $result;
+
+    }
+    
+    function deletePatientrecords($id)
+    {
+        $sql = "DELETE FROM hasta_kayitlari WHERE id = '$id'";
+        $result["data"] = $this->delete($sql);
+
+        return $result;
+    }
+
+
+    function updatePatientrecords($id,$hasta_id, $ucret_id, $doktor_id, $aciklama, $bakiye_id)
+    {     
+        $sql = "UPDATE hasta_kayitlari SET hasta_id = ?, ucret_id = ?, doktor_id = ?, aciklama = ?, bakiye_id = ? WHERE id = '$id'";
+        $data = [$hasta_id,$ucret_id, $doktor_id, $aciklama, $bakiye_id];
+        $result["data"] = $this->insertAndUpdate($sql,$data);
+
+        return $result;
+    }
+
+    function getByIdPatientrecords($id)
+    {
+        $sql = "Select * from hasta_kayitlari WHERE id='$id' ";
+        $result["data"]=$this->get($sql);
+ 
+    return $result;
+
+    }
+
+    function getAllPatientrecords()
+    {
+        $sql = "Select * from hasta_kayitlari ";
+        $result["data"]=$this->getAll($sql);
+
         return $result;
 
     }
