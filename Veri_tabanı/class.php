@@ -111,7 +111,7 @@ class Crud extends Config
 class Admin extends Crud
 {
 
-    function createAdmin($firstname,$lastname,$email,$phone,$password,$admin_id,$admin_token)
+    function createAdmin($name,$surname,$tel,$email,$password,$admin_id,$admin_token)
     {
         $result["result"]=false;
 
@@ -120,8 +120,8 @@ class Admin extends Crud
         if($result["result"] == true){
             $token=md5(uniqid(rand(), true));
             $password=md5($password);
-        $sql="INSERT INTO admins (firstname,lastname,email,token,phone,password) VALUES (?,?,?,?,?,?)";
-        $data=[$firstname,$lastname,$email,$token,$phone,$password];
+        $sql="INSERT INTO kullanıcılar (name,surname,tel,email,password,token) VALUES (?,?,?,?,?,?)";
+        $data=[$name,$surname,$tel,$email,$password,$token];
         $result["result"] = $this->insertAndUpdate($sql,$data);
 
         }
@@ -134,26 +134,6 @@ class Admin extends Crud
         return $result;
     }
 
-    function deleteByMyIdAdmin($admin_id,$admin_token)
-    {
-
-        $result["result"]=false;
-
-        $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
-
-        if($result["result"] == true){
-        $sql = "DELETE FROM admins WHERE id = '$admin_id'";
-        $result["data"] = $this->delete($sql);
-
-        }
-        else{
-            $result["result"] = false;
-            $result["code"] = 4004;
-            $result["data"] ="error wrong token or id";
-        }
-        return $result;
-    }
-
 
     function deleteByIdAdmin($delete_id,$admin_id,$admin_token)
     {
@@ -163,7 +143,7 @@ class Admin extends Crud
         $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
 
         if($result["result"] == true){
-        $sql = "DELETE FROM admins WHERE id = '$delete_id'";
+        $sql = "DELETE FROM kullanıcılar WHERE id = '$delete_id'";
         $result["data"] = $this->delete($sql);
 
         }
@@ -175,47 +155,6 @@ class Admin extends Crud
         return $result;
     }
 
-
-
-    function getByIdAdmin($get_id,$admin_id,$admin_token)
-    {
-        $result["result"]=false;
-
-        $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
-
-        if($result["result"] == true){
-            $sql = "Select * from admins WHERE id='$get_id' ";
-            $result["data"]=$this->get($sql);
-
-        }
-        else{
-            $result["result"] = false;
-            $result["code"] = 4004;
-            $result["data"] ="error wrong token or id";
-        }
-        return $result;
-    }
-
-    function getByMyIdAdmin($admin_id,$admin_token)
-    {
-        $result["result"]=false;
-
-        $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
-
-        if($result["result"] == true){
-            $sql = "Select * from admins WHERE id='$admin_id' ";
-            $result["data"]=$this->get($sql);
-
-        }
-        else{
-            $result["result"] = false;
-            $result["code"] = 4004;
-            $result["data"] ="error wrong token or id";
-        }
-        return $result;
-
-    }
-
     function getAllAdmin($admin_id,$admin_token)
     {
         $result["result"]=false;
@@ -223,7 +162,7 @@ class Admin extends Crud
         $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
 
         if($result["result"] == true){
-        $sql = "Select * from admins";
+        $sql = "Select * from kullanıcılar";
         $result["data"]=$this->getAll($sql);
 
         }
@@ -235,60 +174,26 @@ class Admin extends Crud
         return $result;
     }
 
-    function updateByMyIdAdmin($firstname,$lastname,$email,$phone,$password,$admin_id,$admin_token)
+    function checkToken($admin_id, $admin_token)
     {
         $result["result"]=false;
 
-        $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
-
-        if($result["result"] == true){
-            $password=md5($password);
-        $sql = "UPDATE admins SET firstname = ?, lastname = ?, email = ?, phone = ?, password = ? WHERE id = '$admin_id'";
-        $data = [$firstname,$lastname,$email,$phone,$password];
-
-        $result["data"] = $this->insertAndUpdate($sql,$data);
-
-        }
-        else{
-            $result["result"] = false;
-            $result["code"] = 4004;
-            $result["data"] ="error wrong token or id";
-        }
-
+        $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token); //checkAccessForAdmin  METODUNUDA SS LE
+        
         return $result;
     }
 
-    function updateByIdAdmin($update_id,$firstname,$lastname,$email,$phone,$password,$admin_id,$admin_token)
-    {
 
-        $result["result"]=false;
 
-        $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
 
-        if($result["result"] == true){
-            $password=md5($password);
-
-        $sql = "UPDATE admins SET firstname = ?, lastname = ?, email = ?, phone = ?, password = ? WHERE id = '$update_id'";
-        $data = [$firstname,$lastname,$email,$phone,$password];
-
-        $result["data"] = $this->insertAndUpdate($sql,$data);
-
-        }
-        else{
-            $result["result"] = false;
-            $result["code"] = 4004;
-            $result["data"] ="error wrong token or id";
-        }
-
-        return $result;
-    }
 
     function login($email, $password)
     {
         $password=md5($password);
         $sql = "Select id from admins WHERE email='$email' AND password='$password' ";
-        $result["data"]=$this->get($sql);
+        $result["data"]=$this->get($sql);  
 
+        // ŞİMDİLİK BURAYI YAZMA RAPORA BUNU ÖNÜMÜZDEKİ HAFTA EKLEYECEĞİZ
 
         if($result["data"]){
 
@@ -304,15 +209,6 @@ class Admin extends Crud
             
         }
        
-        return $result;
-    }
-    
-    function checkToken($admin_id, $admin_token)
-    {
-        $result["result"]=false;
-
-        $result["result"]= $this->checkAccessForAdmin($admin_id,$admin_token);
-        
         return $result;
     }
     
